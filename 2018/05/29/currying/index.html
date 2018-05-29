@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>currying | 这可能是个技术博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="重要概念柯里化 把接受多个参数的函数变换成接受一个单一参数（最初函数的第一个参数）的函数，并且返回接受余下的参数而且返回结果的新函数的技术。 柯里化通常也称部分求值，其含义是给函数分步传递参数，每次传递参数后部分应用参数，并返回一个更具体的函数接受剩下的参数，这中间可嵌套多层这样的接受部分参数函数，直至返回最后结果。  原理方法一传递一个参数，返回方法二，方法二递归调用，当参数为空时返回结果。期间">
+<meta name="keywords" content="前端">
+<meta property="og:type" content="article">
+<meta property="og:title" content="currying">
+<meta property="og:url" content="http://yoursite.com/2018/05/29/currying/index.html">
+<meta property="og:site_name" content="这可能是个技术博客">
+<meta property="og:description" content="重要概念柯里化 把接受多个参数的函数变换成接受一个单一参数（最初函数的第一个参数）的函数，并且返回接受余下的参数而且返回结果的新函数的技术。 柯里化通常也称部分求值，其含义是给函数分步传递参数，每次传递参数后部分应用参数，并返回一个更具体的函数接受剩下的参数，这中间可嵌套多层这样的接受部分参数函数，直至返回最后结果。  原理方法一传递一个参数，返回方法二，方法二递归调用，当参数为空时返回结果。期间">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-05-29T09:56:37.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="currying">
+<meta name="twitter:description" content="重要概念柯里化 把接受多个参数的函数变换成接受一个单一参数（最初函数的第一个参数）的函数，并且返回接受余下的参数而且返回结果的新函数的技术。 柯里化通常也称部分求值，其含义是给函数分步传递参数，每次传递参数后部分应用参数，并返回一个更具体的函数接受剩下的参数，这中间可嵌套多层这样的接受部分参数函数，直至返回最后结果。  原理方法一传递一个参数，返回方法二，方法二递归调用，当参数为空时返回结果。期间">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">这可能是个技术博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">我懒的一批</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="https://github.com/dingyoujian">gitHub</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-currying" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/05/29/currying/" class="article-date">
+  <time datetime="2018-05-29T08:58:01.000Z" itemprop="datePublished">2018-05-29</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      currying
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="重要概念"><a href="#重要概念" class="headerlink" title="重要概念"></a>重要概念</h2><h4 id="柯里化"><a href="#柯里化" class="headerlink" title="柯里化"></a>柯里化</h4><ul>
+<li>把接受多个参数的函数变换成接受一个单一参数（最初函数的第一个参数）的函数，并且返回接受余下的参数而且返回结果的新函数的技术。</li>
+<li>柯里化通常也称部分求值，其含义是给函数分步传递参数，每次传递参数后部分应用参数，并返回一个更具体的函数接受剩下的参数，这中间可嵌套多层这样的接受部分参数函数，直至返回最后结果。</li>
+</ul>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>方法一传递一个参数，返回方法二，方法二递归调用，当参数为空时返回结果。<br>期间方法一的私有变量会产生闭包，保存了方法二的结果。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">// add 函数柯里化</span><br><span class="line">function add()&#123;</span><br><span class="line">    //建立args,利用闭包特性，不断保存arguments</span><br><span class="line">    var args = [].slice.call(arguments);</span><br><span class="line">       //方法一，新建_add函数实现柯里化</span><br><span class="line">    var _add = function()&#123;</span><br><span class="line">        if(arguments.length === 0)&#123;</span><br><span class="line">            //参数为空，对args执行加法</span><br><span class="line">            return args.reduce(function(a,b)&#123;return a+b&#125;);</span><br><span class="line">        &#125;else &#123;</span><br><span class="line">            //否则，保存参数到args，返回一个函数</span><br><span class="line">            [].push.apply(args,arguments);</span><br><span class="line">            return _add;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    //返回_add函数</span><br><span class="line">    return _add;</span><br><span class="line">&#125;</span><br><span class="line">例子原链接：https://www.jianshu.com/p/f88a5175e7a2</span><br></pre></td></tr></table></figure></p>
+<h3 id="通用的函数来对普通函数进行柯里化"><a href="#通用的函数来对普通函数进行柯里化" class="headerlink" title="通用的函数来对普通函数进行柯里化"></a>通用的函数来对普通函数进行柯里化</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">//  通用的函数柯里化构造方法</span><br><span class="line">function curry(func)&#123;</span><br><span class="line">    //新建args保存参数，注意，第一个参数应该是要柯里化的函数，所以args里面去掉第一个</span><br><span class="line">    var args = [].slice.call(arguments,1);</span><br><span class="line">    //新建_func函数作为返回值</span><br><span class="line">    var _func =  function()&#123;</span><br><span class="line">        //参数长度为0，执行func函数，完成该函数的功能</span><br><span class="line">        if(arguments.length === 0)&#123;</span><br><span class="line">            return func.apply(this,args);</span><br><span class="line">        &#125;else &#123;</span><br><span class="line">            //否则，存储参数到闭包中，返回本函数</span><br><span class="line">            [].push.apply(args,arguments);</span><br><span class="line">            return _func;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return _func;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function add()&#123;</span><br><span class="line">    return [].reduce.call(arguments,function(a,b)&#123;return a+b&#125;);</span><br><span class="line">&#125;</span><br><span class="line">console.log(curry(add,1,2,3)(1)(2)(3,4,5,5)(5,6,6,7,8,8)(1)(1)(1)());//69</span><br><span class="line"></span><br><span class="line">链接：https://www.jianshu.com/p/f88a5175e7a2</span><br></pre></td></tr></table></figure>
+<h3 id="ES6下的柯里化"><a href="#ES6下的柯里化" class="headerlink" title="ES6下的柯里化"></a>ES6下的柯里化</h3><h4 id="let-add-x-gt-y-gt-z-gt-x-y-z-柯里化3次"><a href="#let-add-x-gt-y-gt-z-gt-x-y-z-柯里化3次" class="headerlink" title="let add = x =&gt; y =&gt; z =&gt; {x + y + z}; 柯里化3次"></a>let add = x =&gt; y =&gt; z =&gt; {x + y + z}; 柯里化3次</h4>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/05/29/currying/" data-id="cjhricjj90000qpo5ugkfsvo0" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/前端/">前端</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2018/05/28/inject/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">inject</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/前端/">前端</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/前端/" style="font-size: 10px;">前端</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a><span class="archive-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/05/29/currying/">currying</a>
+          </li>
+        
+          <li>
+            <a href="/2018/05/28/inject/">inject</a>
+          </li>
+        
+          <li>
+            <a href="/2018/05/23/cache/">浏览器缓存</a>
+          </li>
+        
+          <li>
+            <a href="/2018/05/23/hello-world/">Hello World</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 丁有剑<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="https://github.com/dingyoujian" class="mobile-nav-link">gitHub</a>
+  
+</nav>
+    
+
+<script src="https://cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
